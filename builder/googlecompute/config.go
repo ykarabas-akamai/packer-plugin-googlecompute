@@ -178,6 +178,9 @@ type Config struct {
 	//  }
 	//  ```
 	ImageStorageLocations []string `mapstructure:"image_storage_locations" required:"false"`
+	// The name of the disk that should be used to create an image. Defaults to the
+	// value of the `disk_name` setting if not set.
+	ImageSourceDisk string `mapstructure:"image_source_disk" required:"false"`
 	// A name to give the launched instance. Beware that this must be unique.
 	// Defaults to `packer-{{uuid}}`.
 	InstanceName string `mapstructure:"instance_name" required:"false"`
@@ -492,6 +495,10 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 
 	if c.DiskName == "" {
 		c.DiskName = c.InstanceName
+	}
+
+	if c.ImageSourceDisk == "" {
+		c.ImageSourceDisk = c.DiskName
 	}
 
 	if c.MachineType == "" {
