@@ -189,6 +189,9 @@ builder.
    }
    ```
 
+- `image_source_disk` (string) - The name of the disk that should be used to create an image. Defaults to the
+  value of the `disk_name` setting if not set.
+
 - `instance_name` (string) - A name to give the launched instance. Beware that this must be unique.
   Defaults to `packer-{{uuid}}`.
 
