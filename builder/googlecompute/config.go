@@ -499,6 +499,20 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 
 	if c.ImageSourceDisk == "" {
 		c.ImageSourceDisk = c.DiskName
+	} else if c.ImageSourceDisk != c.DiskName {
+		found := false
+
+		for _, bd := range c.ExtraBlockDevices {
+			if bd.DiskName == c.ImageSourceDisk {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			errs = packersdk.MultiErrorAppend(errs,
+				errors.New("image_source_disk must either be empty or refer to a valid disk_name that is attached to this instance."))
+		}
 	}
 
 	if c.MachineType == "" {

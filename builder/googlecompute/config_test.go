@@ -272,6 +272,16 @@ func TestConfigPrepare(t *testing.T) {
 			map[string]string{"kmsKeyName": "foo", "RawKey": "foo"},
 			false,
 		},
+		{
+			"image_source_disk",
+			"second-disk",
+			false,
+		},
+		{
+			"image_source_disk",
+			"not-a-valid-disk-name",
+			true,
+		},
 	}
 
 	for _, tc := range cases {
@@ -656,6 +666,13 @@ func testConfig(t *testing.T) (config map[string]interface{}, tempAccountFile st
 		},
 		"image_storage_locations": []string{
 			"us-east1",
+		},
+		"disk_attachment": []map[string]interface{}{
+			{
+				"volume_type": "pd-standard",
+				"volume_size": 20,
+				"disk_name":   "second-disk",
+			},
 		},
 		"metadata_files": map[string]string{},
 		"zone":           "us-east1-a",
