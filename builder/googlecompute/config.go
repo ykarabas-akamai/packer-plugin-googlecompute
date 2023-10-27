@@ -505,6 +505,13 @@ func (c *Config) Prepare(raws ...interface{}) ([]string, error) {
 		for _, bd := range c.ExtraBlockDevices {
 			if bd.DiskName == c.ImageSourceDisk {
 				found = true
+
+				if bd.VolumeType == LocalScratch {
+					errs = packersdk.MultiErrorAppend(errs, errors.New("image_source_disk cannot refer to a scratch disk."))
+					break
+				}
+
+				bd.imageSourceDisk = true
 				break
 			}
 		}

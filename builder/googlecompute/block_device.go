@@ -97,6 +97,11 @@ type BlockDevice struct {
 	// It is not exposed since the parent config already specifies it
 	// and it will be set for the block device when preparing it.
 	zone string
+	// imageSourceDisk is true if this disk is the target disk during the StepCreateImage step.
+	//
+	// It is not exposed since the parent config specifies this as a string
+	// to indicate which of the disks is the target.
+	imageSourceDisk bool
 }
 
 func volumeTypeError() string {
@@ -288,6 +293,10 @@ func (bd BlockDevice) shouldAutoDelete() bool {
 	}
 
 	if bd.KeepDevice {
+		return false
+	}
+
+	if bd.imageSourceDisk {
 		return false
 	}
 
